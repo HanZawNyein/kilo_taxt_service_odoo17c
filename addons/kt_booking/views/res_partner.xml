@@ -17,6 +17,7 @@
         <field name="res_model">res.partner</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">[('partner_type','=','driver')]</field>
+        <field name="context">{'default_partner_type':'driver'}</field>
     </record>
     <record id="customers_action" model="ir.actions.act_window">
         <field name="name">Customers</field>
@@ -24,5 +25,6 @@
         <field name="res_model">res.partner</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">[('partner_type','=','customer')]</field>
+        <field name="context">{'default_partner_type':'customer'}</field>
     </record>
 </odoo>
