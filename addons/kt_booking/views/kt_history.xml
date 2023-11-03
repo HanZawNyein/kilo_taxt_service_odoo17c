@@ -6,5 +6,6 @@
         <field name="res_model">kt.booking</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('state','=','arrived')]</field>
+        <field name="context">{'create':False, 'edit':False, 'delete':False}</field>
     </record>
 </odoo>
