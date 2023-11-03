@@ -36,11 +36,11 @@
                 <sheet>
                     <group>
                         <group string="Customer Information">
-                            <field name="customer_id" readonly="state != 'draft'"/>
+                            <field name="customer_id" readonly="state != 'draft'" domain="[('partner_type','=','customer')]"/>
                             <field name="create_date"/>
                         </group>
                         <group string="Driver Information">
-                            <field name="driver_id" readonly="state != 'draft'"/>
+                            <field name="driver_id" readonly="state != 'draft'" domain="[('partner_type','=','driver')]"/>
                         </group>
                     </group>
 
