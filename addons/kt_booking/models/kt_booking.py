@@ -21,8 +21,10 @@ class KtBooking(models.Model):
         ('accept', 'Accept'),
         ('reach_to_customer', 'Reach to Customer'),
         ('arrived', 'Arrived'),
+        ('paid', 'paid'),
         ('cancel', 'Cancel'),
     ], default='draft')
+    invoice_id = fields.Many2one('account.move')
 
     # @api.constrains('start_kilo', 'end_kilo')
     # def _check_start_kilo_end_kilo(self):
@@ -51,9 +53,11 @@ class KtBooking(models.Model):
             ('accept', 'reach_to_customer'),
             ('reach_to_customer', 'arrived'),
             ('reach_to_customer', 'cancel'),
+            ('arrived', 'paid'),
             # TODO:Test
             ('cancel', 'draft'),
             ('arrived', 'draft'),
+            ('paid', 'draft'),
         ]
         return (old_state, new_state) in allowed
 
@@ -72,13 +76,24 @@ class KtBooking(models.Model):
         self.change_state('booking')
 
     def make_accept(self):
+        if not self.driver_id:
+            raise UserError(_("Driver should be added First."))
         self.change_state('accept')
 
     def make_reach_to_customer(self):
+        self.start_kilo = 1500
         self.change_state('reach_to_customer')
 
     def make_arrived(self):
+        if not self.end_kilo:
+            raise UserError(_("End Kilo should be added First."))
+        if self.start_kilo >= self.end_kilo:
+            raise UserError(_("End should be greater than Start Kilo."))
         self.change_state('arrived')
 
     def make_cancel(self):
+
         self.change_state('cancel')
+
+    def make_paid(self):
+        self.change_state('paid')

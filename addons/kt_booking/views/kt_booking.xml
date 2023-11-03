@@ -30,9 +30,13 @@
                     <button type="object" class="btn btn-success" invisible="state != 'accept'"
                             name="make_reach_to_customer"
                             string="Reach to Customer"/>
-                    <button type="object" class="btn btn-success" invisible="state != 'reach_to_customer'" name="make_arrived"
+                    <button type="object" class="btn btn-success" invisible="state != 'reach_to_customer'"
+                            name="make_arrived"
                             string="Arrived"/>
-                    <button type="object" class="btn btn-warning" invisible="state not in ('booking','accept','reach_to_customer')"
+                    <button type="object" class="btn btn-primary" invisible="state != 'arrived'" name="make_paid"
+                            string="Make Payment"/>
+                    <button type="object" class="btn btn-warning"
+                            invisible="state not in ('booking','accept','reach_to_customer')"
                             name="make_cancel"
                             string="Cancel"/>
                 </header>
@@ -43,23 +47,27 @@
                                    domain="[('partner_type','=','customer')]"/>
                             <field name="create_date"/>
                         </group>
-                        <group string="Driver Information">
-                            <field name="driver_id" readonly="state != 'draft'"
-                                   domain="[('partner_type','=','driver')]"/>
-                        </group>
-                    </group>
-
-                    <group>
                         <group string="Start Location">
                             <field name="start_latitude" readonly="state != 'draft'"/>
                             <field name="start_longitude" readonly="state != 'draft'"/>
                         </group>
-                        <group string="Arrived Information">
-                            <field name="start_kilo" readonly="state != 'draft'"/>
-                            <field name="end_kilo" readonly="state != 'draft'"/>
-                            <field name="currency_id" invisible="1"/>
-                            <field name="amount" widget="monetary" readonly="state != 'draft'"/>
+
+                    </group>
+
+                    <group>
+                        <group string="Driver Information" invisible="state == 'draft'">
+                            <field name="driver_id" readonly="state != 'booking'"
+                                   domain="[('partner_type','=','driver')]"/>
                         </group>
+                        <group string="Arrived Information" invisible="state not in ['reach_to_customer','arrived','paid']">
+                            <field name="start_kilo" readonly="state != 'draft'"/>
+                            <field name="end_kilo" readonly="state != 'reach_to_customer'"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount" widget="monetary" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Invoice Information" invisible="state != 'paid'">
+                        <field name="invoice_id"/>
                     </group>
                 </sheet>
             </form>
