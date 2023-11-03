@@ -37,6 +37,7 @@
                     <group>
                         <group string="Customer Information">
                             <field name="customer_id" readonly="state != 'draft'"/>
+                            <field name="create_date"/>
                         </group>
                         <group string="Driver Information">
                             <field name="driver_id" readonly="state != 'draft'"/>
