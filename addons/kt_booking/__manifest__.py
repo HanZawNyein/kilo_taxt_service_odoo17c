@@ -6,6 +6,7 @@
         "views/kt_booking.xml",
         "views/kt_history.xml",
         "views/res_partner.xml",
+        "views/res_config_settings.xml",
         "views/menus.xml",
     ],
     "license": "LGPL-3"

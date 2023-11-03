@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="kt_booking" string="Kilo Taxi" name="kt_booking">
+                    <block title="Kilo Taxi Configuration" id="kilo_taxi_configuration">
+                        <setting id="init_kilo">
+                            <label string="Init Kilo" for="init_kilo" class="col-lg-3 o_light_label"/>
+                            <field name="init_kilo"/>
+                        </setting>
+                        <setting id="one_kilo_fees">
+                            <label string="Per Kilo Fees" for="per_kilo_fees" class="col-lg-3 o_light_label"/>
+                            <field name="per_kilo_fees"/>
+                        </setting>
+                        <setting id="service_fees">
+                            <label string="Service Fees" for="service_fees" class="col-lg-3 o_light_label"/>
+                            <field name="service_fees"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>
