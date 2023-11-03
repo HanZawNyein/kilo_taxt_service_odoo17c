@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Inherit Form View to Modify it -->
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">view_partner_form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <field name="partner_type" widget="radio"/>
+            </field>
+        </field>
+    </record>
+    <record id="driver_action" model="ir.actions.act_window">
+        <field name="name">Drivers</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('partner_type','=','driver')]</field>
+    </record>
+    <record id="customers_action" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('partner_type','=','customer')]</field>
+    </record>
+</odoo>

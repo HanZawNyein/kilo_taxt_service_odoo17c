@@ -5,5 +5,11 @@
         <!-- This Menu Item Must have a parent -->
         <menuitem id="booking_categ" name="Booking" sequence="0" action="kt_booking.kt_booking_action"/>
         <menuitem id="history_categ" name="History" sequence="1" action="kt_booking.kt_history_action"/>
+        <!-- This Menu Item Must have a parent -->
+        <menuitem id="customer_categ" name="Customers">
+            <!-- This Menu Item must have a parent and an action -->
+            <menuitem id="drivers_categ" name="Drivers" action="kt_booking.driver_action" sequence="0"/>
+            <menuitem id="customers_categ" name="Customers" action="kt_booking.customers_action" sequence="1"/>
+        </menuitem>
     </menuitem>
 </odoo>
