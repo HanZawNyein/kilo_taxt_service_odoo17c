@@ -73,6 +73,8 @@
                             <field name="service_fees" widget="monetary" readonly="1" invisible="state != 'paid'"/>
                             <field name="driver_fees" widget="monetary" readonly="1" invisible="state != 'paid'"/>
                         </group>
+                        <group string="Invoice Information" invisible="state != 'paid'">
+                        </group>
                     </group>
                 </sheet>
             </form>
