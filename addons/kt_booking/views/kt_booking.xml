@@ -58,12 +58,20 @@
                         <group string="Driver Information" invisible="state == 'draft'">
                             <field name="driver_id" readonly="state != 'booking'"
                                    domain="[('partner_type','=','driver')]"/>
+                            <field name="driver_phone"/>
                         </group>
-                        <group string="Arrived Information" invisible="state not in ['reach_to_customer','arrived','paid']">
+                        <group string="Arrived Information"
+                               invisible="state not in ['reach_to_customer','arrived','paid']">
                             <field name="start_kilo" readonly="state != 'draft'"/>
                             <field name="end_kilo" readonly="state != 'reach_to_customer'"/>
                             <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Finance Information" invisible="state not in ['arrived','paid']">
                             <field name="amount" widget="monetary" readonly="1"/>
+                            <field name="service_fees" widget="monetary" readonly="1" invisible="state != 'paid'"/>
+                            <field name="driver_fees" widget="monetary" readonly="1" invisible="state != 'paid'"/>
                         </group>
                     </group>
                 </sheet>
@@ -75,6 +83,6 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">kt.booking</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('state','!=','arrived')]</field>
+        <field name="domain">[('state','!=','paid')]</field>
     </record>
 </odoo>

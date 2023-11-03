@@ -12,9 +12,14 @@ class KtBooking(models.Model):
     start_longitude = fields.Float('Longitude', digits=(10, 6))
     start_kilo = fields.Float('Start Kilo')
     driver_id = fields.Many2one('res.partner')
+    driver_phone = fields.Char(related="driver_id.phone")
     end_kilo = fields.Float('End Kilo')
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
-    amount = fields.Monetary(currency_field='currency_id', compute="_compute_amount", inverse="_inverse_end_kilo")
+    amount = fields.Monetary(currency_field='currency_id', compute="_compute_total_amount", inverse="_inverse_end_kilo",
+                             string="Total Amount")
+    service_fees = fields.Monetary(currency_field='currency_id', compute="_compute_total_amount", )
+    driver_fees = fields.Monetary(currency_field='currency_id', compute="_compute_total_amount", )
+
     state = fields.Selection([
         ('draft', 'Draft'),
         ('booking', 'Booking'),
@@ -26,11 +31,19 @@ class KtBooking(models.Model):
     ], default='draft')
 
     @api.depends('start_kilo', 'end_kilo')
-    def _compute_amount(self):
+    def _compute_total_amount(self):
         for rec in self:
-            total_kilo = rec.end_kilo - rec.start_kilo
-            total_kilo = total_kilo * 300  # 300MMK
-            rec.amount = total_kilo
+            ICPSudo = self.env['ir.config_parameter'].sudo()
+            per_kilo_fees = float(ICPSudo.get_param('per_kilo_fees'))
+            service_fees = float(ICPSudo.get_param('service_fees'))
+            if rec.end_kilo:
+                rec.amount = rec.end_kilo * per_kilo_fees
+                rec.service_fees = rec.end_kilo * service_fees
+                rec.driver_fees = rec.amount - rec.service_fees
+            else:
+                rec.amount = rec.start_kilo * per_kilo_fees
+                rec.service_fees = rec.start_kilo * service_fees
+                rec.driver_fees = rec.amount - rec.service_fees
 
     def _inverse_end_kilo(self):
         for rec in self:
@@ -74,7 +87,8 @@ class KtBooking(models.Model):
         self.change_state('accept')
 
     def make_reach_to_customer(self):
-        self.start_kilo = 1500
+        ICPSudo = self.env['ir.config_parameter'].sudo()
+        self.start_kilo = ICPSudo.get_param('init_kilo')
         self.change_state('reach_to_customer')
 
     def make_arrived(self):
@@ -85,7 +99,6 @@ class KtBooking(models.Model):
         self.change_state('arrived')
 
     def make_cancel(self):
-
         self.change_state('cancel')
 
     def make_paid(self):
