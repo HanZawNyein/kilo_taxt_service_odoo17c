@@ -66,9 +66,6 @@
                             <field name="amount" widget="monetary" readonly="1"/>
                         </group>
                     </group>
-                    <group string="Invoice Information" invisible="state != 'paid'">
-                        <field name="invoice_id"/>
-                    </group>
                 </sheet>
             </form>
         </field>

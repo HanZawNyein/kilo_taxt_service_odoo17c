@@ -24,13 +24,6 @@ class KtBooking(models.Model):
         ('paid', 'paid'),
         ('cancel', 'Cancel'),
     ], default='draft')
-    invoice_id = fields.Many2one('account.move')
-
-    # @api.constrains('start_kilo', 'end_kilo')
-    # def _check_start_kilo_end_kilo(self):
-    #     for rec in self:
-    #         if rec.start_kilo and rec.end_kilo and (rec.start_kilo >= rec.end_kilo):
-    #             raise UserError(_("Start Kilo should be greater than End Kilo."))
 
     @api.depends('start_kilo', 'end_kilo')
     def _compute_amount(self):
