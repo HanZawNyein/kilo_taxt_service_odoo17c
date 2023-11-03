@@ -4,5 +4,6 @@
     <menuitem id="kt_booking_root" name="Kilo Taxi">
         <!-- This Menu Item Must have a parent -->
         <menuitem id="booking_categ" name="Booking" sequence="0" action="kt_booking.kt_booking_action"/>
+        <menuitem id="history_categ" name="History" sequence="1" action="kt_booking.kt_history_action"/>
     </menuitem>
 </odoo>

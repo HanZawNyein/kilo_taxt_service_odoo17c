@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
+    <record id="kt_booking_view_tree" model="ir.ui.view">
+        <field name="name">kt_booking_view_tree</field>
+        <field name="model">kt.booking</field>
+        <field name="arch" type="xml">
+            <tree string="kt_booking_tree">
+                <field name="customer_id"/>
+                <field name="start_kilo"/>
+                <field name="end_kilo"/>
+                <field name="driver_id"/>
+                <field name="amount" widget="monetary"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
     <record id="kt_booking_view_form" model="ir.ui.view">
         <field name="name">kt_booking_view_form</field>
         <field name="model">kt.booking</field>
@@ -10,9 +25,12 @@
                     <button type="object" name="rest_to_draft" string="Rest to Draft"/>
                     <button type="object" class="btn btn-primary" invisible="state != 'draft'" name="make_booking"
                             string="Booking"/>
-                    <button type="object" class="btn btn-primary" invisible="state != 'booking'" name="make_arrived"
+                    <button type="object" class="btn btn-primary" invisible="state != 'booking'" name="make_accept"
+                            string="Accept"/>
+                    <button type="object" class="btn btn-primary" invisible="state != 'accept'" name="make_arrived"
                             string="Arrived"/>
-                    <button type="object" class="btn btn-warning" invisible="state != 'booking'" name="make_cancel"
+                    <button type="object" class="btn btn-warning" invisible="state not in ('booking','accept')"
+                            name="make_cancel"
                             string="Cancel"/>
                 </header>
                 <sheet>
@@ -26,15 +44,15 @@
                     </group>
 
                     <group>
-                        <group string="Start Information">
+                        <group string="Start Location">
                             <field name="start_latitude" readonly="state != 'draft'"/>
                             <field name="start_longitude" readonly="state != 'draft'"/>
-                            <field name="start_kilo" readonly="state != 'draft'"/>
                         </group>
                         <group string="Arrived Information">
+                            <field name="start_kilo" readonly="state != 'draft'"/>
                             <field name="end_kilo" readonly="state != 'draft'"/>
-                            <field name="currency_id" readonly="state != 'draft'"/>
-                            <field name="amount" readonly="state != 'draft'"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount" widget="monetary" readonly="state != 'draft'"/>
                         </group>
                     </group>
                 </sheet>
@@ -46,5 +64,6 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">kt.booking</field>
         <field name="view_mode">tree,form</field>
+        <field name="domain">[('state','in',['booking','draft'])]</field>
     </record>
 </odoo>

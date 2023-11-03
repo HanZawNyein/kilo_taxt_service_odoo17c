@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="kt_history_action" model="ir.actions.act_window">
+        <field name="name">History</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">kt.booking</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state','=','arrived')]</field>
+    </record>
+</odoo>

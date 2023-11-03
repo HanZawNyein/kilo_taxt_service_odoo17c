@@ -14,10 +14,11 @@ class KtBooking(models.Model):
     driver_id = fields.Many2one('res.partner')
     end_kilo = fields.Float('End Kilo')
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
-    amount = fields.Monetary(currency_field='currency_id', compute="")
+    amount = fields.Monetary(currency_field='currency_id', compute="_compute_amount", inverse="_inverse_end_kilo")
     state = fields.Selection([
         ('draft', 'Draft'),
         ('booking', 'Booking'),
+        ('accept', 'Accept'),
         ('arrived', 'Arrived'),
         ('cancel', 'Cancel'),
     ], default='draft')
@@ -26,16 +27,24 @@ class KtBooking(models.Model):
     def _compute_amount(self):
         for rec in self:
             total_kilo = rec.end_kilo - rec.start_kilo
-            total_kilo *= 300  # 300MMK
+            total_kilo = total_kilo * 300  # 300MMK
             rec.amount = total_kilo
+
+    def _inverse_end_kilo(self):
+        for rec in self:
+            rec.end_kilo = rec.start_kilo + (rec.amount / 2)
 
     @api.model
     def is_allowed_transition(self, old_state, new_state):
         allowed = [
             ('draft', 'booking'),
             ('booking', 'cancel'),
-            ('booking', 'arrived'),
+            ('booking', 'accept'),
+            ('accept', 'arrived'),
+            ('accept', 'cancel'),
+            # TODO:Test
             ('cancel', 'draft'),
+            ('arrived', 'draft'),
         ]
         return (old_state, new_state) in allowed
 
@@ -52,6 +61,9 @@ class KtBooking(models.Model):
 
     def make_booking(self):
         self.change_state('booking')
+
+    def make_accept(self):
+        self.change_state('accept')
 
     def make_arrived(self):
         self.change_state('arrived')
