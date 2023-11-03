@@ -21,26 +21,31 @@
         <field name="arch" type="xml">
             <form string="kt_booking_form">
                 <header>
-                    <field name="state" widget="statusbar"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft"/>
                     <button type="object" name="rest_to_draft" string="Rest to Draft"/>
                     <button type="object" class="btn btn-primary" invisible="state != 'draft'" name="make_booking"
                             string="Booking"/>
                     <button type="object" class="btn btn-info" invisible="state != 'booking'" name="make_accept"
                             string="Accept"/>
-                    <button type="object" class="btn btn-success" invisible="state != 'accept'" name="make_arrived"
+                    <button type="object" class="btn btn-success" invisible="state != 'accept'"
+                            name="make_reach_to_customer"
+                            string="Reach to Customer"/>
+                    <button type="object" class="btn btn-success" invisible="state != 'reach_to_customer'" name="make_arrived"
                             string="Arrived"/>
-                    <button type="object" class="btn btn-warning" invisible="state not in ('booking','accept')"
+                    <button type="object" class="btn btn-warning" invisible="state not in ('booking','accept','reach_to_customer')"
                             name="make_cancel"
                             string="Cancel"/>
                 </header>
                 <sheet>
                     <group>
                         <group string="Customer Information">
-                            <field name="customer_id" readonly="state != 'draft'" domain="[('partner_type','=','customer')]"/>
+                            <field name="customer_id" readonly="state != 'draft'"
+                                   domain="[('partner_type','=','customer')]"/>
                             <field name="create_date"/>
                         </group>
                         <group string="Driver Information">
-                            <field name="driver_id" readonly="state != 'draft'" domain="[('partner_type','=','driver')]"/>
+                            <field name="driver_id" readonly="state != 'draft'"
+                                   domain="[('partner_type','=','driver')]"/>
                         </group>
                     </group>
 

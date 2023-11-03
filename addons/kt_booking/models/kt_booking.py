@@ -7,7 +7,7 @@ class KtBooking(models.Model):
     _description = 'Kt Booking'
     _rec_name = "customer_id"
 
-    customer_id = fields.Many2one('res.partner')
+    customer_id = fields.Many2one('res.partner', required=True)
     start_latitude = fields.Float('Latitude', digits=(10, 6))
     start_longitude = fields.Float('Longitude', digits=(10, 6))
     start_kilo = fields.Float('Start Kilo')
@@ -19,15 +19,16 @@ class KtBooking(models.Model):
         ('draft', 'Draft'),
         ('booking', 'Booking'),
         ('accept', 'Accept'),
+        ('reach_to_customer', 'Reach to Customer'),
         ('arrived', 'Arrived'),
         ('cancel', 'Cancel'),
     ], default='draft')
 
-    @api.constrains('start_kilo', 'end_kilo')
-    def _check_start_kilo_end_kilo(self):
-        for rec in self:
-            if rec.start_kilo >= rec.end_kilo:
-                raise UserError(_("Start Kilo should be greater than End Kilo."))
+    # @api.constrains('start_kilo', 'end_kilo')
+    # def _check_start_kilo_end_kilo(self):
+    #     for rec in self:
+    #         if rec.start_kilo and rec.end_kilo and (rec.start_kilo >= rec.end_kilo):
+    #             raise UserError(_("Start Kilo should be greater than End Kilo."))
 
     @api.depends('start_kilo', 'end_kilo')
     def _compute_amount(self):
@@ -46,8 +47,10 @@ class KtBooking(models.Model):
             ('draft', 'booking'),
             ('booking', 'cancel'),
             ('booking', 'accept'),
-            ('accept', 'arrived'),
             ('accept', 'cancel'),
+            ('accept', 'reach_to_customer'),
+            ('reach_to_customer', 'arrived'),
+            ('reach_to_customer', 'cancel'),
             # TODO:Test
             ('cancel', 'draft'),
             ('arrived', 'draft'),
@@ -70,6 +73,9 @@ class KtBooking(models.Model):
 
     def make_accept(self):
         self.change_state('accept')
+
+    def make_reach_to_customer(self):
+        self.change_state('reach_to_customer')
 
     def make_arrived(self):
         self.change_state('arrived')
