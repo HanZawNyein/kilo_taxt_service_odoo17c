@@ -23,6 +23,12 @@ class KtBooking(models.Model):
         ('cancel', 'Cancel'),
     ], default='draft')
 
+    @api.constrains('start_kilo', 'end_kilo')
+    def _check_start_kilo_end_kilo(self):
+        for rec in self:
+            if rec.start_kilo >= rec.end_kilo:
+                raise UserError(_("Start Kilo should be greater than End Kilo."))
+
     @api.depends('start_kilo', 'end_kilo')
     def _compute_amount(self):
         for rec in self:
