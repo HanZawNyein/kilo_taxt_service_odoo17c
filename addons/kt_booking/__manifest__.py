@@ -3,6 +3,9 @@
     "author": "Han Zaw Nyein",
     "depends":["base","account"],
     "data": [
+        "security/security.xml",
+        "security/ir.model.access.csv",
+
         "views/kt_booking.xml",
         "views/kt_history.xml",
         "views/res_partner.xml",

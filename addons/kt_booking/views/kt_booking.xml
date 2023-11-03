@@ -26,15 +26,15 @@
                     <button type="object" class="btn btn-primary" invisible="state != 'draft'" name="make_booking"
                             string="Booking"/>
                     <button type="object" class="btn btn-info" invisible="state != 'booking'" name="make_accept"
-                            string="Accept"/>
+                            string="Accept" groups="kt_booking.kilo_driver"/>
                     <button type="object" class="btn btn-success" invisible="state != 'accept'"
                             name="make_reach_to_customer"
-                            string="Reach to Customer"/>
+                            string="Reach to Customer" groups="kt_booking.kilo_driver"/>
                     <button type="object" class="btn btn-success" invisible="state != 'reach_to_customer'"
                             name="make_arrived"
                             string="Arrived"/>
                     <button type="object" class="btn btn-primary" invisible="state != 'arrived'" name="make_paid"
-                            string="Make Payment"/>
+                            string="Make Payment" groups="kt_booking.kilo_driver"/>
                     <button type="object" class="btn btn-warning"
                             invisible="state not in ('booking','accept','reach_to_customer')"
                             name="make_cancel"

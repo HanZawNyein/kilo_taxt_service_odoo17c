@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
-                <app data-string="kt_booking" string="Kilo Taxi" name="kt_booking">
+                <app data-string="kt_booking" string="Kilo Taxi" name="kt_booking" groups="kt_booking.kilo_manager">
                     <block title="Kilo Taxi Configuration" id="kilo_taxi_configuration">
                         <setting id="init_kilo">
                             <label string="Init Kilo" for="init_kilo" class="col-lg-3 o_light_label"/>

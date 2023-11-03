@@ -6,6 +6,7 @@ class KtBooking(models.Model):
     _name = 'kt.booking'
     _description = 'Kt Booking'
     _rec_name = "customer_id"
+    _order = "create_date"
 
     customer_id = fields.Many2one('res.partner', required=True)
     start_latitude = fields.Float('Latitude', digits=(10, 6))

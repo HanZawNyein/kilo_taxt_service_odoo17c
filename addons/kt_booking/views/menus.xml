@@ -3,18 +3,18 @@
     <!-- This Menu Item will appear in the Upper bar, That's why It needs NO parent or action -->
     <menuitem id="kt_booking_root" name="Kilo Taxi">
         <!-- This Menu Item Must have a parent -->
-        <menuitem id="booking_menu_categ" name="Booking" sequence="0">
+        <menuitem id="booking_menu_categ" name="Booking" sequence="0" groups="kt_booking.kilo_user">
             <!-- This Menu Item Must have a parent -->
             <menuitem id="booking_categ" name="Booking" sequence="0" action="kt_booking.kt_booking_action"/>
             <menuitem id="history_categ" name="History" sequence="1" action="kt_booking.kt_history_action"/>
         </menuitem>
         <!-- This Menu Item Must have a parent -->
-        <menuitem id="customer_categ" name="Customers" sequence="1">
+        <menuitem id="customer_categ" name="Customers" sequence="1" groups="kt_booking.kilo_manager">
             <!-- This Menu Item must have a parent and an action -->
             <menuitem id="drivers_categ" name="Drivers" action="kt_booking.driver_action" sequence="0"/>
             <menuitem id="customers_categ" name="Customers" action="kt_booking.customers_action" sequence="1"/>
         </menuitem>
-        <menuitem id="configuration_categ" name="Configuration" sequence="2">
+        <menuitem id="configuration_categ" name="Configuration" sequence="2" groups="kt_booking.kilo_manager">
             <!-- This Menu Item must have a parent and an action -->
             <menuitem id="settings_categ" name="Settings" action="kt_booking.action_kt_booking_settings" sequence="0"/>
         </menuitem>
