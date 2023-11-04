@@ -18,8 +18,8 @@ class KtBooking(models.Model):
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
     amount = fields.Monetary(currency_field='currency_id', compute="_compute_total_amount", inverse="_inverse_end_kilo",
                              string="Total Amount")
-    service_fees = fields.Monetary(currency_field='currency_id', compute="_compute_total_amount", )
-    driver_fees = fields.Monetary(currency_field='currency_id', compute="_compute_total_amount", )
+    service_fees = fields.Monetary(currency_field='currency_id', compute="_compute_total_amount", store=True)
+    driver_fees = fields.Monetary(currency_field='currency_id', compute="_compute_total_amount", store=True)
 
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -33,6 +33,7 @@ class KtBooking(models.Model):
 
     @api.depends('start_kilo', 'end_kilo')
     def _compute_total_amount(self):
+         # TODO:change make_arrived method in add remove compute
         for rec in self:
             ICPSudo = self.env['ir.config_parameter'].sudo()
             per_kilo_fees = float(ICPSudo.get_param('per_kilo_fees'))

@@ -7,6 +7,7 @@
             <!-- This Menu Item Must have a parent -->
             <menuitem id="booking_categ" name="Booking" sequence="0" action="kt_booking.kt_booking_action"/>
             <menuitem id="history_categ" name="History" sequence="1" action="kt_booking.kt_history_action"/>
+            <menuitem id="invoice_categ" name="Invoices" sequence="1" action="account.action_move_out_invoice_type"/>
         </menuitem>
         <!-- This Menu Item Must have a parent -->
         <menuitem id="customer_categ" name="Customers" sequence="1" groups="kt_booking.kilo_manager">
