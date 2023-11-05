@@ -29,12 +29,14 @@
             <field name="model_id" ref="kt_booking.model_kt_booking"/>
             <field name="domain_force">[('customer_id', '=', user.partner_id.id)]</field>
             <field name="perm_create" eval="1"/>
+            <field name="perm_write" eval="1"/>
             <field name="groups" eval="[(4, ref('kt_booking.kilo_user'))]"/>
         </record>
         <record id="kilo_taxi_driver_rule" model="ir.rule">
             <field name="name">kilo_taxi_driver_rule</field>
             <field name="model_id" ref="kt_booking.model_kt_booking"/>
             <field name="domain_force">[('state','!=','draft'),('driver_id','in',[False,user.partner_id.id])]</field>
+            <field name="perm_write" eval="1"/>
             <field name="groups" eval="[(4, ref('kt_booking.kilo_driver'))]"/>
         </record>
         <record id="kilo_taxi_manager_rule" model="ir.rule">

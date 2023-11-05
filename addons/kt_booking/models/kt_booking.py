@@ -87,8 +87,12 @@ class KtBooking(models.Model):
         self.change_state('booking')
 
     def make_accept(self):
+        partner_id = self.env.user.partner_id
+        if partner_id.partner_type == "driver":
+            self.sudo().driver_id = partner_id
         if not self.driver_id:
             raise UserError(_("Driver should be added First."))
+
         self.change_state('accept')
 
     def make_reach_to_customer(self):

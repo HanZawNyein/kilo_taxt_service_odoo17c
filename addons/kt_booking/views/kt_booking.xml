@@ -56,7 +56,7 @@
 
                     <group>
                         <group string="Driver Information" invisible="state == 'draft'">
-                            <field name="driver_id" readonly="state != 'booking'"
+                            <field name="driver_id" readonly="1"
                                    domain="[('partner_type','=','driver')]"/>
                             <field name="driver_phone"/>
                         </group>
@@ -75,7 +75,7 @@
                             <field name="driver_fees" widget="monetary" readonly="1" invisible="state != 'paid'"
                                    groups="kt_booking.kilo_driver"/>
                         </group>
-                        <group string="Invoice Information" groups="kt_booking.kilo_driver" invisible="account_move_id == False or state != 'paid'">
+                        <group string="Invoice Information" groups="kt_booking.kilo_manager" invisible="account_move_id == False or state != 'paid'">
                             <field name="account_move_id" readonly="1"/>
                         </group>
                     </group>
