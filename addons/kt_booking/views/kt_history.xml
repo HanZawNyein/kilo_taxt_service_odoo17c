@@ -5,7 +5,7 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">kt.booking</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('state','=','paid')]</field>
+        <field name="domain">[('state','not in',['draft','booking'])]</field>
         <field name="context">{'create':False, 'edit':False, 'delete':False}</field>
     </record>
 </odoo>

@@ -16,11 +16,13 @@ class KtBooking(models.Model):
     driver_phone = fields.Char(related="driver_id.phone")
     end_kilo = fields.Float('End Kilo')
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
-    amount = fields.Monetary(currency_field='currency_id', string="Total Amount",)# compute="_compute_total_amount", inverse="_inverse_end_kilo",
-                             # string="Total Amount")
-    service_fees = fields.Monetary(currency_field='currency_id')#, compute="_compute_total_amount", store=True)
-    driver_fees = fields.Monetary(currency_field='currency_id')#, compute="_compute_total_amount", store=True)
+    amount = fields.Monetary(currency_field='currency_id',
+                             string="Total Amount", )  # compute="_compute_total_amount", inverse="_inverse_end_kilo",
+    # string="Total Amount")
+    service_fees = fields.Monetary(currency_field='currency_id')  # , compute="_compute_total_amount", store=True)
+    driver_fees = fields.Monetary(currency_field='currency_id')  # , compute="_compute_total_amount", store=True)
     account_move_id = fields.Many2one('account.move')
+    active = fields.Boolean(default=True)
 
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -105,7 +107,7 @@ class KtBooking(models.Model):
         if self.end_kilo:
             self.amount = self.end_kilo * per_kilo_fees
         else:
-            self.amount = self.start_kilo*per_kilo_fees
+            self.amount = self.start_kilo * per_kilo_fees
         self.change_state('arrived')
 
     def make_cancel(self):
