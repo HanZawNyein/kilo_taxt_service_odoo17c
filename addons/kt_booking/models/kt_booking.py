@@ -16,10 +16,11 @@ class KtBooking(models.Model):
     driver_phone = fields.Char(related="driver_id.phone")
     end_kilo = fields.Float('End Kilo')
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
-    amount = fields.Monetary(currency_field='currency_id', compute="_compute_total_amount", inverse="_inverse_end_kilo",
-                             string="Total Amount")
-    service_fees = fields.Monetary(currency_field='currency_id', compute="_compute_total_amount", store=True)
-    driver_fees = fields.Monetary(currency_field='currency_id', compute="_compute_total_amount", store=True)
+    amount = fields.Monetary(currency_field='currency_id', string="Total Amount",)# compute="_compute_total_amount", inverse="_inverse_end_kilo",
+                             # string="Total Amount")
+    service_fees = fields.Monetary(currency_field='currency_id')#, compute="_compute_total_amount", store=True)
+    driver_fees = fields.Monetary(currency_field='currency_id')#, compute="_compute_total_amount", store=True)
+    account_move_id = fields.Many2one('account.move')
 
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -31,25 +32,25 @@ class KtBooking(models.Model):
         ('cancel', 'Cancel'),
     ], default='draft')
 
-    @api.depends('start_kilo', 'end_kilo')
-    def _compute_total_amount(self):
-         # TODO:change make_arrived method in add remove compute
-        for rec in self:
-            ICPSudo = self.env['ir.config_parameter'].sudo()
-            per_kilo_fees = float(ICPSudo.get_param('per_kilo_fees'))
-            service_fees = float(ICPSudo.get_param('service_fees'))
-            if rec.end_kilo:
-                rec.amount = rec.end_kilo * per_kilo_fees
-                rec.service_fees = rec.end_kilo * service_fees
-                rec.driver_fees = rec.amount - rec.service_fees
-            else:
-                rec.amount = rec.start_kilo * per_kilo_fees
-                rec.service_fees = rec.start_kilo * service_fees
-                rec.driver_fees = rec.amount - rec.service_fees
+    # @api.depends('start_kilo', 'end_kilo')
+    # def _compute_total_amount(self):
+    #     # TODO:change make_arrived method in add remove compute
+    #     for rec in self:
+    #         ICPSudo = self.env['ir.config_parameter'].sudo()
+    #         per_kilo_fees = float(ICPSudo.get_param('per_kilo_fees'))
+    #         service_fees = float(ICPSudo.get_param('service_fees'))
+    #         if rec.end_kilo:
+    #             rec.amount = rec.end_kilo * per_kilo_fees
+    #             rec.service_fees = rec.end_kilo * service_fees
+    #             rec.driver_fees = rec.amount - rec.service_fees
+    #         else:
+    #             rec.amount = rec.start_kilo * per_kilo_fees
+    #             rec.service_fees = rec.start_kilo * service_fees
+    #             rec.driver_fees = rec.amount - rec.service_fees
 
-    def _inverse_end_kilo(self):
-        for rec in self:
-            rec.end_kilo = rec.start_kilo + (rec.amount / 2)
+    # def _inverse_end_kilo(self):
+    #     for rec in self:
+    #         rec.end_kilo = rec.start_kilo + (rec.amount / 2)
 
     @api.model
     def is_allowed_transition(self, old_state, new_state):
@@ -98,10 +99,44 @@ class KtBooking(models.Model):
             raise UserError(_("End Kilo should be added First."))
         if self.start_kilo >= self.end_kilo:
             raise UserError(_("End should be greater than Start Kilo."))
+
+        ICPSudo = self.env['ir.config_parameter'].sudo()
+        per_kilo_fees = float(ICPSudo.get_param('per_kilo_fees'))
+        if self.end_kilo:
+            self.amount = self.end_kilo * per_kilo_fees
+        else:
+            self.amount = self.start_kilo*per_kilo_fees
         self.change_state('arrived')
 
     def make_cancel(self):
         self.change_state('cancel')
 
     def make_paid(self):
+        ICPSudo = self.env['ir.config_parameter'].sudo()
+        service_fees = float(ICPSudo.get_param('service_fees'))
+        self.service_fees = self.start_kilo * service_fees
+        self.driver_fees = self.amount - self.service_fees
+        # TODO:create invoice
+        self._create_invoice()
         self.change_state('paid')
+
+    def _create_invoice(self):
+        invoice_create_data = {
+            'move_type': 'out_invoice',
+
+            'partner_id': 10,
+
+            'invoice_date': fields.Date.today(),
+            'invoice_line_ids': [
+                (0, 0, {
+                    "product_id": 16,
+                    "quantity": 1,
+                    "price_unit": 147,
+                    "currency_id": 1,
+                    "display_type": "product"
+                })
+            ]
+        }
+        account_move_id = self.env['account.move'].create(invoice_create_data)
+        account_move_id.action_post()
+        self.account_move_id = account_move_id
