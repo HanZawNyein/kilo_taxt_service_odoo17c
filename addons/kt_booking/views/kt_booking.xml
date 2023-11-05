@@ -70,10 +70,12 @@
                     <group>
                         <group string="Finance Information" invisible="state not in ['arrived','paid']">
                             <field name="amount" widget="monetary" readonly="1"/>
-                            <field name="service_fees" widget="monetary" readonly="1" invisible="state != 'paid'"/>
-                            <field name="driver_fees" widget="monetary" readonly="1" invisible="state != 'paid'"/>
+                            <field name="service_fees" widget="monetary" readonly="1" invisible="state != 'paid'"
+                                   groups="kt_booking.kilo_driver"/>
+                            <field name="driver_fees" widget="monetary" readonly="1" invisible="state != 'paid'"
+                                   groups="kt_booking.kilo_driver"/>
                         </group>
-                        <group string="Invoice Information" invisible="account_move_id == False or state != 'paid'">
+                        <group string="Invoice Information" groups="kt_booking.kilo_driver" invisible="account_move_id == False or state != 'paid'">
                             <field name="account_move_id" readonly="1"/>
                         </group>
                     </group>
