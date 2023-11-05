@@ -135,11 +135,12 @@ class KtBooking(models.Model):
             'invoice_date': fields.Date.today(),
             'invoice_line_ids': [
                 (0, 0, {
-                    "product_id": 16,
+                    "product_id": self.env.ref('kt_booking.kali_taxi_product_product').id,
                     "quantity": 1,
-                    "price_unit": 147,
+                    "price_unit": self.service_fees,
                     "currency_id": 1,
-                    "display_type": "product"
+                    "display_type": "product",
+                    "tax_ids":False
                 })
             ]
         }

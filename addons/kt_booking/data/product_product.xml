@@ -1,0 +1,25 @@
+<odoo>
+    <data noupdate="0">
+<!--        <record id="kali_taxi_product" model="product.template">-->
+<!--            <field name="name">Kali Taxi</field>-->
+<!--            <field name="categ_id" ref="product.product_category_6"/>-->
+<!--            <field name="standard_price">0.0</field>-->
+<!--            <field name="list_price">0.0</field>-->
+<!--            <field name="detailed_type">service</field>-->
+<!--        </record>-->
+        <record id="kali_taxi_product_product" model="product.product">
+            <field name="default_code">Kilo</field>
+            <field name="name">Kali Taxi</field>
+            <field name="detailed_type">service</field>
+<!--            <field name="weight">0.01</field>-->
+<!--            <field name="categ_id" ref="product.product_category_5"/>-->
+<!--            <field name="lst_price">100.0</field>-->
+<!--            <field name="standard_price">70.0</field>-->
+<!--            <field name="weight">1.0</field>-->
+<!--            <field name="tracking">lot</field>-->
+<!--            <field name="uom_id" ref="uom.product_uom_unit"/>-->
+<!--            <field name="uom_po_id" ref="uom.product_uom_unit"/>-->
+<!--            <field name="image_1920" type="base64" file="stock/static/img/cable_management.png"/>-->
+        </record>
+    </data>
+</odoo>

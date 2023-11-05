@@ -6,6 +6,8 @@
         "security/security.xml",
         "security/ir.model.access.csv",
 
+        "data/product_product.xml",
+
         "views/kt_booking.xml",
         "views/kt_history.xml",
         "views/res_partner.xml",
